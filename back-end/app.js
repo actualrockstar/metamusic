@@ -89,7 +89,7 @@ app.get('/login' , async (req, res, next) => {
     querystring.stringify({
       response_type: 'code',
       client_id: client_id,
-      scope: 'user-read-private user-read-email',
+      scope: 'user-read-private user-read-email user-top-read user-follow-modify',
       redirect_uri
     }))
     
@@ -149,5 +149,15 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
-
+app.get('/userdata/:accesstoken', function(req, res){
+  const token = req.params.accesstoken;
+  spotifyApi.setAccessToken(token);
+  spotifyApi.getMe()
+  .then(function(data) {
+    console.log('heres the data', data.body);
+    res.json(data);
+  }, function(err) {
+    console.log('oops:', err);
+  });
+})
 
