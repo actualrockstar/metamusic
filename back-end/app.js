@@ -149,15 +149,42 @@ app.get('/refresh_token', function(req, res) {
   });
 });
 
+
+
 app.get('/userdata/:accesstoken', function(req, res){
   const token = req.params.accesstoken;
   spotifyApi.setAccessToken(token);
   spotifyApi.getMe()
   .then(function(data) {
-    console.log('heres the data', data.body);
+    //console.log('heres the data', data.body);
     res.json(data);
   }, function(err) {
     console.log('oops:', err);
   });
 })
 
+app.get('/listenerdata/:accesstoken', function (req, res){
+  
+  const token = req.params.accesstoken;
+  spotifyApi.setAccessToken(token);
+  /* Get a User’s Top Artists*/
+  spotifyApi.getMyTopArtists()
+  .then(function(data) {
+    let topArtists = data.body.items;
+    console.log(topArtists);
+    res.json({artists: topArtists});
+  }, function(err) {
+    console.log('Something went wrong!', err);
+  });
+
+  /* Get a User’s Top Tracks
+  spotifyApi.getMyTopTracks()
+  .then(function(data) {
+    let topTracks = data.body.items;
+    console.log(topTracks);
+  }, function(err) {
+    console.log('Something went wrong!', err);
+  });
+*/
+  
+})
